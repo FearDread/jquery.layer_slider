@@ -18,15 +18,46 @@
         'rotateInUpLeft',
         'rotateInUpRight',
       ],
-      attention:{},
-      zoom:{},
-      bounce:{},
-      fade:{},
+      flip:[],
+      attention:[
+        'bounce',
+        'flash',
+        'wobble',
+        'pulse',
+        'shake',
+        'swing',
+        'tada',
+        'rubberBand'
+      ],
+      zoom:[],
+      bounce:[
+        'bounceIn',
+        'bounceOut',
+        'bounceInDown',
+        'bounceInUp',
+        'bounceInLeft',
+        'bounceInRight',
+        'bounceOutUp',
+        'bounceOutLeft',
+        'bounceOutRight',
+        'bounceOutDown'
+      ],
+      fade:[
+        'fadeIn',
+        'fadeInDown',
+        'fadeInDownBig',
+        'fadeInUp',
+        'fadeInUpBig',
+        'fadeInLeft',
+        'fadeInLeftBig',
+        'fadeInRight',
+        'fadeInRightBig'
+      ],
       speacial:{},
-      lightspeed:{
-        lsi:'lightSpeedIn',
-        lso:'lightSpeedOut'
-      }
+      lightspeed:[
+        'lightSpeedIn',
+        'lightSpeedOut'
+      ]
     }
     // Store Reference //
     $.data($el, 'MOSSlider', slider);
@@ -59,11 +90,23 @@
 
         switch(slider.opts.style){
           case 'fade':
-            current.fadeOut(500).removeClass('active');
-            next.fadeIn(1000).addClass('active');
+            current.fadeOut(200).removeClass('active');
+            next.fadeIn(300).addClass('active');
             break;
           case 'slide':
-
+             current.animate({
+                 left: - slider.slideWidth
+             }, 200,function(){
+                 $('.slides li:first-child').appendTo('.slides');
+                 $('slides').css('left', '0');
+             });
+             current.removeClass('active');
+             next.addClass('active').animate({
+                 left: - slider.slideWidth
+                 }, 200,function(){
+                   $('.slides li:first-child').appendTo('.slides');
+                   $('slides').css('left', '0');
+             });
             break;
           default:
             break;
@@ -75,7 +118,7 @@
           left: + slider.slideWidth
           },400,function(){
             $('.slides li:last-child').prependTo('.slides');
-            $('.slides').css('left', '');
+            $('.slides').css('left', '0');
         });
       },
       layer:function(item){
@@ -93,7 +136,7 @@
             setTimeout(function(){
               caption.show();
               _this.animate(caption,
-                slider.animations.lightspeed.lsi, slider.opts.capTime);
+                slider.animations.lightspeed[0], slider.opts.capTime);
 
           }, slider.opts.layerTime);
         }, slider.opts.layerTime);
@@ -102,7 +145,7 @@
         var _this = this;
         var len = slider.data.length;
 
-        if(_this.activeIndex < len - 1){
+        if(_this.activeIndex <= len - 1){
           var item = $(slider.data[_this.activeIndex]);
 
           _this.layer(item);
@@ -157,7 +200,7 @@
   // Defaults //
   $.MOSSlider.defaults = {
     text:null,
-    style:'fade',
+    style:'slide',
     brand:null,
     image:null,
     showing:{
