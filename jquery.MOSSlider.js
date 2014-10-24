@@ -67,12 +67,13 @@
       animate:function($el, anim, time){
         if(time === undefined){
           time = slider.opts.animationTime || 1500;
-        }
-        if(!$el.hasClass('animated')){
+        }else if(!$el.hasClass('animated')){
           $el.addClass('animated');
+        }else if(!$el.is(':visible')){
+          $el.show();
         }
-        $el.addClass(anim);
 
+        $el.addClass(anim);
         setTimeout(function(){
           $el.removeClass(anim);
         }, time);
@@ -85,12 +86,21 @@
       },
       slide_next:function(){
         console.log('next slide');
-        var current = $('.item.active');
+        var _this = this;
+        var current = $('.item.active', slider);
         var next = current.next().length ? current.next() : current.siblings().first();
+        var rand = Math.floor(Math.random() * (9 - 0) + 0);
 
         switch(slider.opts.style){
-          case 'fade':
+          case 'random':
+            next.addClass('active').show();
             current.fadeOut(200).removeClass('active');
+
+            _this.animate(next, slider.animations.fade[rand]);
+            //current.children('div').hide();
+            break;
+          case 'fade':
+            current.fadeOut(300).removeClass('active');
             next.fadeIn(300).addClass('active');
             break;
           case 'slide':
@@ -100,13 +110,9 @@
                  $('.slides li:first-child').appendTo('.slides');
                  $('slides').css('left', '0');
              });
+
              current.removeClass('active');
-             next.addClass('active').animate({
-                 left: - slider.slideWidth
-                 }, 200,function(){
-                   $('.slides li:first-child').appendTo('.slides');
-                   $('slides').css('left', '0');
-             });
+             next.addClass('active');
             break;
           default:
             break;
@@ -168,11 +174,19 @@
         }
       },
       bind_events:function(){
-      
+        var _this = this;
+        $('.next-slide',slider).bind('click', function(_e){
+          _e.preventDefault();
+          _this.slide_next();
+        });
+        $('.prev-slide',slider).bind('click', function(_e){
+          _e.preventDefault();
+          _this.slide_prev();
+        });
       },
       init:function(){
         console.log('MOSSlider: ', slider.opts);
-        // Data //
+        // Markup //
         this.setup();
         // Slideshow Loop //
         this.cycle();
@@ -200,7 +214,7 @@
   // Defaults //
   $.MOSSlider.defaults = {
     text:null,
-    style:'slide',
+    style:'random',
     brand:null,
     image:null,
     showing:{
