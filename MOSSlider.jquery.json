@@ -1,0 +1,19 @@
+{
+  "name":"MOSSlider",
+  "title":"Moshyn Layer Slider",
+  "description":"jQuery layered slider plugin with library of animations and timings, requires animate.css",
+  "keywords":[
+    "slider",
+    "layered",
+    "animation"
+  ],
+  "version":"0.0.1",
+  "author":{
+    "name":"Garrett Haptonstall",
+    "url":"http://moshyn.com"
+  },
+  "dependencies":{
+    "jquery":">=1.8",
+    "animate.css":">=1.0"
+  }
+}
