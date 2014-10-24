@@ -16,9 +16,15 @@
         'rotateInDownLeft',
         'rotateInDownRight',
         'rotateInUpLeft',
-        'rotateInUpRight',
+        'rotateInUpRight'
       ],
-      flip:[],
+      flip:[
+        'flip',
+        'flipInX',
+        'flipInY',
+        'flipOutX',
+        'flipOutY'
+      ],
       attention:[
         'bounce',
         'flash',
@@ -29,7 +35,18 @@
         'tada',
         'rubberBand'
       ],
-      zoom:[],
+      zoom:[
+        'zoomIn',
+        'zoomDownIn',
+        'zoomUpIn',
+        'zoomLeftIn',
+        'zoomRightIn',
+        'zoomOut',
+        'zoomUpOut',
+        'zoomDownOut',
+        'zoomLeftOut',
+        'zoomRightOut'
+      ],
       bounce:[
         'bounceIn',
         'bounceOut',
@@ -53,7 +70,11 @@
         'fadeInRight',
         'fadeInRightBig'
       ],
-      speacial:{},
+      speacial:[
+        'hinge',
+        'rollIn',
+        'rollOut'
+      ],
       lightspeed:[
         'lightSpeedIn',
         'lightSpeedOut'
@@ -67,13 +88,9 @@
       animate:function($el, anim, time){
         if(time === undefined){
           time = slider.opts.animationTime || 1500;
-        }else if(!$el.hasClass('animated')){
-          $el.addClass('animated');
-        }else if(!$el.is(':visible')){
-          $el.show();
         }
 
-        $el.addClass(anim);
+        $el.show().addClass(anim);
         setTimeout(function(){
           $el.removeClass(anim);
         }, time);
@@ -85,34 +102,35 @@
         });
       },
       slide_next:function(){
-        console.log('next slide');
-        var _this = this;
-        var current = $('.item.active', slider);
-        var next = current.next().length ? current.next() : current.siblings().first();
-        var rand = Math.floor(Math.random() * (9 - 0) + 0);
+        console.log('next slide: ' + this.activeIndex);
+        var _this = this,
+            current = $('.item.active', slider),
+            next = current.next().length ? current.next() : current.siblings().first(),
+            rand = Math.floor(Math.random() * (9 - 0) + 0);
+            this.activeIndex++;
 
         switch(slider.opts.style){
           case 'random':
-            next.addClass('active').show();
-            current.fadeOut(200).removeClass('active');
+            current.css('display','none').removeClass('active');
+            current.children('div').css('display','none');
 
+            next.addClass('active');
             _this.animate(next, slider.animations.fade[rand]);
-            //current.children('div').hide();
             break;
           case 'fade':
-            current.fadeOut(300).removeClass('active');
-            next.fadeIn(300).addClass('active');
+            current.fadeOut(500).removeClass('active');
+            next.fadeIn(500).addClass('active');
             break;
           case 'slide':
+             next.addClass('active');
+
+             current.removeClass('active');
              current.animate({
                  left: - slider.slideWidth
              }, 200,function(){
                  $('.slides li:first-child').appendTo('.slides');
                  $('slides').css('left', '0');
              });
-
-             current.removeClass('active');
-             next.addClass('active');
             break;
           default:
             break;
@@ -120,12 +138,28 @@
       },
       slide_prev:function(){
         console.log('prev slide');
-        slider.opts.selector.animate({
-          left: + slider.slideWidth
-          },400,function(){
-            $('.slides li:last-child').prependTo('.slides');
-            $('.slides').css('left', '0');
-        });
+        var _this = this, current = $('.item.active', slider),
+            prev = current.previous().length ? current.previous() : current.siblings().last(),
+            rand = Math.floor(Math.random() * (9 - 0) + 0);
+
+        switch(slider.opts.style){
+          case 'random':
+
+            break;
+          case 'fade':
+
+            break;
+          case 'slide':
+            slider.opts.selector.animate({
+              left: + slider.slideWidth
+              },400,function(){
+                $('.slides li:last-child').prependTo('.slides');
+                $('.slides').css('left', '0');
+            });
+            break;
+          default:
+            break;
+        }
       },
       layer:function(item){
         var _this = this;
@@ -148,25 +182,24 @@
         }, slider.opts.layerTime);
       },
       cycle:function(){
-        var _this = this;
+        var _this = this, item;
         var len = slider.data.length;
+        item = $(slider.data[this.activeIndex]);
 
-        if(_this.activeIndex <= len - 1){
-          var item = $(slider.data[_this.activeIndex]);
-
-          _this.layer(item);
-          _this.activeIndex++;
+        if(this.activeIndex < len){
+          this.layer(item);
 
           setTimeout(function(){
-
             _this.slide_next();
             _this.cycle(); 
 
           }, slider.opts.slideTime);
         }else{
-          _this.activeIndex = 0;
-          setTimeout(function(){
+          this.activeIndex = 0;
+          item = $(slider.data[this.activeIndex]);
 
+          this.layer(item);
+          setTimeout(function(){
             _this.slide_next();
             _this.cycle(); 
 
@@ -223,11 +256,11 @@
     focused:true,
     collection:[],
     animating:true,
-    capTime:2500,
-    layerTime:2000,
-    slideTime:6000,
+    capTime:2000,
+    layerTime:1500,
+    slideTime:5000,
     animationTime:1500,
-    brandTime:2000,
+    brandTime:1500,
     start:function(){},
     stop:function(){},
     pause:function(){},
