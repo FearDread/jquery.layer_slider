@@ -32,6 +32,7 @@
     $.data($el, 'MOSSlider', slider);
     // Private Methods //
     _this.methods = {
+      activeIndex:0,
       animate:function($el, anim, time){
         if(time === undefined){
           time = slider.opts.animationTime || 1500;
@@ -47,29 +48,40 @@
       },
       setup:function(){
         slider.data = slider.opts.collection || [];
-
-        return $.each($('.item', slider),
-          function(idx, el){
-            slider.data.push(el);
-          }
-        );
+        return $.each($('.item', slider), function(idx, el){
+          slider.data.push(el);
+        });
       },
       slide_next:function(){
         console.log('next slide');
+        var current = $('.item.active');
+        var next = current.next().length ? current.next() : current.siblings().first();
+
+        switch(slider.opts.style){
+          case 'fade':
+            current.fadeOut(500).removeClass('active');
+            next.fadeIn(1000).addClass('active');
+            break;
+          case 'slide':
+
+            break;
+          default:
+            break;
+        }
+      },
+      slide_prev:function(){
+        console.log('prev slide');
         slider.opts.selector.animate({
           left: + slider.slideWidth
-          },200,function(){
+          },400,function(){
             $('.slides li:last-child').prependTo('.slides');
             $('.slides').css('left', '');
         });
       },
-      slide_prev:function(){
-      
-      },
       layer:function(item){
         var _this = this;
         var rand = Math.floor(Math.random() * (5 - 0) + 0);
-        var caption = $('.caption', item), brand = $('.brand', item);
+        var caption = item.find('.caption'), brand = item.find('.brand'); 
 
         _this.animate(item, 'fadeIn');
 
@@ -86,30 +98,43 @@
           }, slider.opts.layerTime);
         }, slider.opts.layerTime);
       },
+      cycle:function(){
+        var _this = this;
+        var len = slider.data.length;
+
+        if(_this.activeIndex < len - 1){
+          var item = $(slider.data[_this.activeIndex]);
+
+          _this.layer(item);
+          _this.activeIndex++;
+
+          setTimeout(function(){
+
+            _this.slide_next();
+            _this.cycle(); 
+
+          }, slider.opts.slideTime);
+        }else{
+          _this.activeIndex = 0;
+          setTimeout(function(){
+
+            _this.slide_next();
+            _this.cycle(); 
+
+          }, slider.opts.slideTime);
+        }
+      },
       bind_events:function(){
       
       },
       init:function(){
-        console.log('slider init: ', slider.opts);
-        var _this = this;
-        _this.setup();
-
-        var len = slider.data.length, activeIndex = 0;
-        if(len > 0){
-
-          do {
-            var item = $(slider.data[activeIndex]);
-            _this.layer(item);
-
-            setTimeout(function(){
-              if(activeIndex++ < len){
-                _this.slide_next();
-              }
-            }, slider.opts.slideTime);
-          } while(--len); 
-        }
+        console.log('MOSSlider: ', slider.opts);
+        // Data //
+        this.setup();
+        // Slideshow Loop //
+        this.cycle();
         // Controls //
-        _this.bind_events();
+        this.bind_events();
       }
     }
     // Public Methods //
@@ -132,6 +157,7 @@
   // Defaults //
   $.MOSSlider.defaults = {
     text:null,
+    style:'fade',
     brand:null,
     image:null,
     showing:{

@@ -12,7 +12,7 @@ the css library Animate.css for its animation styles.
 
 # Technolegy Used
   - [jQuery](http://jquery.org)
-  - [Animate.css](http://)
+  - [Animate.css](http://daneden.github.io/animate.css/)
 
 ## Getting Started ##
 
