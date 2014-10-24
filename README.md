@@ -26,3 +26,15 @@ git clone --depth 1 https://github.com/FearDread/MOSSlider.git
 # Move the repository to your own project name.
 mv MOSSlider my-project
 ```
+
+#@ License ##
+Copyright © 2014 Moshyn Inc. 
+Licensed under the MIT license.
+
+## About Author ##
+Garrett Haptonstall (@FearDread)
+
+# Social
+  - [Facebook](https://www.facebook.com/ghaptonstall)
+
+
