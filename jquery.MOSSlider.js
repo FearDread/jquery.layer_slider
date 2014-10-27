@@ -1,7 +1,6 @@
 /* jQuery Moshyn Slider v0.0.1 
  * Copyright 2014 @ Moshyn Inc. 
  * Author: Garrett Haptonstall 
- * Contributers: 
 */
 (function($){
   // Object Instance //
@@ -42,7 +41,6 @@
         });
       },
       slide_next:function(){
-        console.log('next slide: ' + this.activeIndex);
         var _this = this,
             current = $('.item.active', slider),
             next = current.next().length ? current.next() : current.siblings().first(),
@@ -52,6 +50,9 @@
           this.reset();
         }else{
           this.activeIndex++;
+        }
+        if(slider.opts.showing.extra){
+          $(slider.opts.showing.extra).css('display','none');
         }
 
         switch(slider.opts.style){
@@ -80,7 +81,6 @@
         }
       },
       slide_prev:function(){
-        console.log('prev slide');
         var _this = this, current = $('.item.active', slider),
             prev = current.previous().length ? current.previous() : current.siblings().last(),
             rand = Math.floor(Math.random() * (9 - 0) + 0);
@@ -109,12 +109,10 @@
         var rand = Math.floor(Math.random() * (5 - 0) + 0);
         var caption = item.find('.caption'), brand = item.find('.brand'); 
 
-        // tmp //
-        $('.featured-info').show();
-        $('.btn-default').show('fast');
-        // ===== //
-
         _this.animate(item, 'fadeIn', 500);
+        if(slider.opts.showing.extra !== null){
+          $(slider.opts.showing.extra).show('slow');
+        }
         setTimeout(function(){
           brand.show();
           _this.animate(brand,
@@ -210,6 +208,7 @@
     brand:null,
     image:null,
     showing:{
+      extra:null,
       slider:true
     },
     focused:true,
