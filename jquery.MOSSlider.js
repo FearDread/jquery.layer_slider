@@ -11,74 +11,15 @@
     slider.opts = $.extend({}, $.MOSSlider.defaults, opts);
     // Animation Library //
     slider.animations = {
-      rotate:[
-        'rotateIn',
-        'rotateInDownLeft',
-        'rotateInDownRight',
-        'rotateInUpLeft',
-        'rotateInUpRight'
-      ],
-      flip:[
-        'flip',
-        'flipInX',
-        'flipInY',
-        'flipOutX',
-        'flipOutY'
-      ],
-      attention:[
-        'bounce',
-        'flash',
-        'wobble',
-        'pulse',
-        'shake',
-        'swing',
-        'tada',
-        'rubberBand'
-      ],
-      zoom:[
-        'zoomIn',
-        'zoomDownIn',
-        'zoomUpIn',
-        'zoomLeftIn',
-        'zoomRightIn',
-        'zoomOut',
-        'zoomUpOut',
-        'zoomDownOut',
-        'zoomLeftOut',
-        'zoomRightOut'
-      ],
-      bounce:[
-        'bounceIn',
-        'bounceOut',
-        'bounceInDown',
-        'bounceInUp',
-        'bounceInLeft',
-        'bounceInRight',
-        'bounceOutUp',
-        'bounceOutLeft',
-        'bounceOutRight',
-        'bounceOutDown'
-      ],
-      fade:[
-        'fadeIn',
-        'fadeInDown',
-        'fadeInDownBig',
-        'fadeInUp',
-        'fadeInUpBig',
-        'fadeInLeft',
-        'fadeInLeftBig',
-        'fadeInRight',
-        'fadeInRightBig'
-      ],
-      speacial:[
-        'hinge',
-        'rollIn',
-        'rollOut'
-      ],
-      lightspeed:[
-        'lightSpeedIn',
-        'lightSpeedOut'
-      ]
+      speacial:['hinge','rollIn','rollOut'],
+      lightspeed:['lightSpeedIn','lightSpeedOut'],
+      flip:['flip','flipInX','flipInY','flipOutX','flipOutY'],
+      texts:['lightSpeedIn','flip','rubberBand','zoomIn','rollIn','fadeInDownBig','swing'],
+      attention:['bounce','flash','wobble','pulse','shake','swing','tada','rubberBand'],
+      rotate:['rotateIn','rotateInDownLeft','rotateInDownRight','rotateInUpLeft','rotateInUpRight'],
+      fade:['fadeIn','fadeInDown','fadeInDownBig','fadeInUp','fadeInUpBig','fadeInLeft','fadeInLeftBig','fadeInRight','fadeInRightBig'],
+      zoom:['zoomIn','zoomDownIn','zoomUpIn','zoomLeftIn','zoomRightIn','zoomOut','zoomUpOut','zoomDownOut','zoomLeftOut','zoomRightOut'],
+      bounce:['bounceIn','bounceOut','bounceInDown','bounceInUp','bounceInLeft','bounceInRight','bounceOutUp','bounceOutLeft','bounceOutRight','bounceOutDown']
     }
     // Store Reference //
     $.data($el, 'MOSSlider', slider);
@@ -89,7 +30,6 @@
         if(time === undefined){
           time = slider.opts.animationTime || 1500;
         }
-
         $el.show().addClass(anim);
         setTimeout(function(){
           $el.removeClass(anim);
@@ -107,13 +47,17 @@
             current = $('.item.active', slider),
             next = current.next().length ? current.next() : current.siblings().first(),
             rand = Math.floor(Math.random() * (9 - 0) + 0);
-            this.activeIndex++;
+
+        if(this.activeIndex == slider.data.length - 1){
+          this.reset();
+        }else{
+          this.activeIndex++;
+        }
 
         switch(slider.opts.style){
           case 'random':
             current.css('display','none').removeClass('active');
             current.children('div').css('display','none');
-
             next.addClass('active');
             _this.animate(next, slider.animations.fade[rand]);
             break;
@@ -123,7 +67,6 @@
             break;
           case 'slide':
              next.addClass('active');
-
              current.removeClass('active');
              current.animate({
                  left: - slider.slideWidth
@@ -166,8 +109,12 @@
         var rand = Math.floor(Math.random() * (5 - 0) + 0);
         var caption = item.find('.caption'), brand = item.find('.brand'); 
 
-        _this.animate(item, 'fadeIn');
+        // tmp //
+        $('.featured-info').show();
+        $('.btn-default').show('fast');
+        // ===== //
 
+        _this.animate(item, 'fadeIn', 500);
         setTimeout(function(){
           brand.show();
           _this.animate(brand,
@@ -176,7 +123,7 @@
             setTimeout(function(){
               caption.show();
               _this.animate(caption,
-                slider.animations.lightspeed[0], slider.opts.capTime);
+                slider.animations.texts[rand], slider.opts.capTime);
 
           }, slider.opts.layerTime);
         }, slider.opts.layerTime);
@@ -186,7 +133,7 @@
         var len = slider.data.length;
         item = $(slider.data[this.activeIndex]);
 
-        if(this.activeIndex < len){
+        if(this.activeIndex < len && slider.opts.animating){
           this.layer(item);
 
           setTimeout(function(){
@@ -194,8 +141,8 @@
             _this.cycle(); 
 
           }, slider.opts.slideTime);
-        }else{
-          this.activeIndex = 0;
+        }else if(slider.opts.animating){
+          this.reset();
           item = $(slider.data[this.activeIndex]);
 
           this.layer(item);
@@ -208,14 +155,23 @@
       },
       bind_events:function(){
         var _this = this;
-        $('.next-slide',slider).bind('click', function(_e){
+        $('.slider-control.right',slider).bind('click',function(_e){
           _e.preventDefault();
           _this.slide_next();
         });
-        $('.prev-slide',slider).bind('click', function(_e){
+        $('.slider-control.left',slider).bind('click',function(_e){
           _e.preventDefault();
           _this.slide_prev();
         });
+        $(slider.opts.container).hover(function(_e){
+          _e.stopPropagation();
+          slider.opts.animating = false;
+          },function(){
+            slider.opts.animating = true;
+        });
+      },
+      reset:function(){
+        this.activeIndex = 0;
       },
       init:function(){
         console.log('MOSSlider: ', slider.opts);
@@ -224,7 +180,7 @@
         // Slideshow Loop //
         this.cycle();
         // Controls //
-        this.bind_events();
+        // this.bind_events();
       }
     }
     // Public Methods //
@@ -235,6 +191,9 @@
     
     }
     slider.pause = function(){
+    
+    }
+    slider.slide = function(){
     
     }
     slider.slideCount = slider.opts.selector.length;
@@ -256,14 +215,15 @@
     focused:true,
     collection:[],
     animating:true,
-    capTime:2000,
-    layerTime:1500,
-    slideTime:5000,
-    animationTime:1500,
+    capTime:1500,
     brandTime:1500,
+    layerTime:1200,
+    slideTime:6500,
+    animationTime:1500,
     start:function(){},
     stop:function(){},
     pause:function(){},
+    container:$('#moshyn-slider'),
     selector:$('.slides > li'),
   }
   // jQuery Function //
