@@ -1,8 +1,8 @@
-MOSSlider
+GLSlider
 =========
-# Moshyn Layer Slider #
+# G Layer Slider #
 
-The Moshyn (MOS) Layer Slider is a simple jQuery plugin that extends the jQuery ($) object
+The G (MOS) Layer Slider is a simple jQuery plugin that extends the jQuery ($) object
 and provides tons of customization options including animations and timing.  This plugin uses
 the css library Animate.css for its animation styles.  
 
@@ -28,7 +28,7 @@ mv MOSSlider my-project
 ```
 
 #@ License ##
-Copyright © 2014 Moshyn Inc. 
+Copyright © 2014 GHAP. 
 Licensed under the MIT license.
 
 ## About Author ##
