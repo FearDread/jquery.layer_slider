@@ -36,5 +36,5 @@ Garrett Haptonstall (@FearDread)
 
 # Social
   - [Facebook](https://www.facebook.com/ghaptonstall)
-
-
+  - [Twitter](https://twitter.com/G_HAP)
+  - [Instagram](https://instagram.com/ghap205)
