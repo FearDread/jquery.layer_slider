@@ -32,24 +32,24 @@
       _this.methods = {
           activeIndex: 0,
           animate: function($el, anim, time) {
-            if (time === undefined) {
-                time = slider.opts.animationTime || 1500;
-            }
+              if (time === undefined) {
+                  time = slider.opts.animationTime || 1500;
+              }
         
-            $el.show().addClass(anim);
+              $el.show().addClass(anim);
         
-            setTimeout(function(){
-                $el.removeClass(anim);
-            }, time);
-        },
-        setup: function() {
-            slider.data = slider.opts.collection || [];
+              setTimeout(function(){
+                  $el.removeClass(anim);
+              }, time);
+          },
+          setup: function() {
+              slider.data = slider.opts.collection || [];
           
-            return $.each($('.item', slider), function(idx, el) {
-                slider.data.push(el);
-            });
-        },
-        slide_next: function() {
+              return $.each($('.item', slider), function(idx, el) {
+                  slider.data.push(el);
+              });
+          },
+          slide_next: function() {
             var _this = this,
                 current = $('.item.active', slider),
                 next = current.next().length ? current.next() : current.siblings().first(),
