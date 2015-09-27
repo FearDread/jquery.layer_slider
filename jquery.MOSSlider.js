@@ -1,62 +1,71 @@
-/* jQuery Moshyn Slider v0.0.1 
- * Copyright 2014 @ Moshyn Inc. 
- * Author: Garrett Haptonstall 
-*/
-(function($){
+/**=============================*
+ * jQuery Layers Slider v0.0.1  *
+ * Copyright 2014 @ ghap.com    *
+ * Author: Garrett Haptonstall  *
+ *=============================**/
+(function($) {
+  
   // Object Instance //
-  $.MOSSlider = function($el, opts){
-    var _this = this, slider = $el;
-    // Public Properties //
-    slider.opts = $.extend({}, $.MOSSlider.defaults, opts);
-    // Animation Library //
-    slider.animations = {
-      speacial:['hinge','rollIn','rollOut'],
-      lightspeed:['lightSpeedIn','lightSpeedOut'],
-      flip:['flip','flipInX','flipInY','flipOutX','flipOutY'],
-      texts:['lightSpeedIn','flip','rubberBand','zoomIn','rollIn','fadeInDownBig','swing'],
-      attention:['bounce','flash','wobble','pulse','shake','swing','tada','rubberBand'],
-      rotate:['rotateIn','rotateInDownLeft','rotateInDownRight','rotateInUpLeft','rotateInUpRight'],
-      fade:['fadeIn','fadeInDown','fadeInDownBig','fadeInUp','fadeInUpBig','fadeInLeft','fadeInLeftBig','fadeInRight','fadeInRightBig'],
-      zoom:['zoomIn','zoomDownIn','zoomUpIn','zoomLeftIn','zoomRightIn','zoomOut','zoomUpOut','zoomDownOut','zoomLeftOut','zoomRightOut'],
-      bounce:['bounceIn','bounceOut','bounceInDown','bounceInUp','bounceInLeft','bounceInRight','bounceOutUp','bounceOutLeft','bounceOutRight','bounceOutDown']
-    }
-    // Store Reference //
-    $.data($el, 'MOSSlider', slider);
-    // Private Methods //
-    _this.methods = {
-      activeIndex:0,
-      animate:function($el, anim, time){
-        if(time === undefined){
-          time = slider.opts.animationTime || 1500;
-        }
-        $el.show().addClass(anim);
-        setTimeout(function(){
-          $el.removeClass(anim);
-        }, time);
-      },
-      setup:function(){
-        slider.data = slider.opts.collection || [];
-        return $.each($('.item', slider), function(idx, el){
-          slider.data.push(el);
-        });
-      },
-      slide_next:function(){
-        var _this = this,
-            current = $('.item.active', slider),
-            next = current.next().length ? current.next() : current.siblings().first(),
-            rand = Math.floor(Math.random() * (9 - 0) + 0);
+  $.layerSlider = function($el, opts) {
+      var _this = this, slider = $el;
+    
+      // Public Properties //
+      slider.opts = $.extend({}, $.layerSlider.defaults, opts);
+    
+      // Animation Library //
+      slider.animations = {
+          speacial: ['hinge','rollIn','rollOut'],
+          lightspeed: ['lightSpeedIn','lightSpeedOut'],
+          flip: ['flip','flipInX','flipInY','flipOutX','flipOutY'],
+          texts:['lightSpeedIn','flip','rubberBand','zoomIn','rollIn','fadeInDownBig','swing'],
+          attention:['bounce','flash','wobble','pulse','shake','swing','tada','rubberBand'],
+          rotate:['rotateIn','rotateInDownLeft','rotateInDownRight','rotateInUpLeft','rotateInUpRight'],
+          fade:['fadeIn','fadeInDown','fadeInDownBig','fadeInUp','fadeInUpBig','fadeInLeft','fadeInLeftBig','fadeInRight','fadeInRightBig'],
+          zoom:['zoomIn','zoomDownIn','zoomUpIn','zoomLeftIn','zoomRightIn','zoomOut','zoomUpOut','zoomDownOut','zoomLeftOut','zoomRightOut'],
+          bounce:['bounceIn','bounceOut','bounceInDown','bounceInUp','bounceInLeft','bounceInRight','bounceOutUp','bounceOutLeft','bounceOutRight','bounceOutDown']
+      };
+    
+      // Store Reference //
+      $.data($el, 'LayerSlider', slider);
+    
+      // Private Methods //
+      _this.methods = {
+          activeIndex: 0,
+          animate: function($el, anim, time) {
+            if (time === undefined) {
+                time = slider.opts.animationTime || 1500;
+            }
+        
+            $el.show().addClass(anim);
+        
+            setTimeout(function(){
+                $el.removeClass(anim);
+            }, time);
+        },
+        setup: function() {
+            slider.data = slider.opts.collection || [];
+          
+            return $.each($('.item', slider), function(idx, el) {
+                slider.data.push(el);
+            });
+        },
+        slide_next: function() {
+            var _this = this,
+                current = $('.item.active', slider),
+                next = current.next().length ? current.next() : current.siblings().first(),
+                rand = Math.floor(Math.random() * (9 - 0) + 0);
 
-        if(this.activeIndex == slider.data.length - 1){
-          this.reset();
-        }else{
-          this.activeIndex++;
-        }
+            if (this.activeIndex == slider.data.length - 1) {
+                this.reset();
+            } else {
+                this.activeIndex++;
+            }
 
-        // Reset Extra Markup //
-        if(slider.opts.showing.extra){
-          $(slider.opts.showing.extra).css('display','none');
-          $(slider.opts.showing.extra).children('div').css('display','none');
-        }
+            // Reset Extra Markup //
+            if (slider.opts.showing.extra) {
+                $(slider.opts.showing.extra).css('display','none');
+               $(slider.opts.showing.extra).children('div').css('display','none');
+            }
 
         switch(slider.opts.style){
           case 'random':
