@@ -317,12 +317,12 @@
         stop: function(){},
         pause: function(){},
         canvas: null,
-        container: $('#moshyn-slider'),
+        container: $('#layer-slider'),
         selector: $('.slides > li'),
     }
 
       // jQuery Function //
-    $.fn.MOSSlider = function(opts) {
+    $.fn.LayerSlider = function(opts) {
         if (opts === undefined) {
           opts = {};
         }
@@ -332,16 +332,16 @@
                 var sel = (opts.selector) ? opts.selector : '.slides > li';
                 var slides = $(this).find(sel);
 
-                if (slides.length === 1 && $(this).data('MOSSlider')) {
+                if (slides.length === 1 && $(this).data('LayerSlider')) {
 
                     slides.fadeIn(opts.animationTime);
 
                     if (opts.start) {
 		        opts.start($(this));
                     }
-                } else if ($(this).data('MOSSlider') === undefined) {
+                } else if ($(this).data('LayerSlider') === undefined) {
 
-                    new $.MOSSlider(this, opts);
+                    new $.LayerSlider(this, opts);
                 }
             });
         }
